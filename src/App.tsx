@@ -10,14 +10,19 @@ import { CustomProjectConfig } from './components/CustomProjectConfig';
 import { MOCK_DCS as INITIAL_DCS } from './constants';
 import { createCustomDataCenter } from './dataGenerator';
 import { UIStyle } from './types';
-import { LayoutDashboard, Globe, ShieldAlert, Zap, Settings, Bell, Activity, Plus } from 'lucide-react';
+import { LayoutDashboard, Globe, ShieldAlert, Zap, Settings, Bell, Activity, Plus, Cpu, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { LLMConfig, DEFAULT_LLM_CONFIG } from './types/llm';
+import { LLMConfigModal } from './components/LLMConfigModal';
+import { AIChatPanel } from './components/AIChatPanel';
 
 function DashboardContent() {
   const { style, setStyle } = useTheme();
   const [dcs, setDcs] = useState(INITIAL_DCS);
   const [selectedDcId, setSelectedDcId] = useState(INITIAL_DCS[0].id);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [isLLMConfigOpen, setIsLLMConfigOpen] = useState(false);
+  const [llmConfig, setLlmConfig] = useState<LLMConfig>(DEFAULT_LLM_CONFIG);
   
   const selectedDc = dcs.find(dc => dc.id === selectedDcId) || dcs[0];
 
@@ -65,6 +70,14 @@ function DashboardContent() {
           >
             <Plus className="w-4 h-4" />
             Novo Projeto
+          </button>
+          <button 
+            onClick={() => setIsLLMConfigOpen(true)}
+            className="p-2 rounded-full bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white group relative"
+            title="LLM Configuration"
+          >
+            <Cpu className="w-5 h-5" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full border-2 border-black" />
           </button>
           <button className="p-2 rounded-full bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white relative">
             <Bell className="w-5 h-5" />
@@ -171,6 +184,19 @@ function DashboardContent() {
         onClose={() => setIsConfigOpen(false)} 
         onDeploy={handleDeploy}
       />
+
+      <AIChatPanel 
+        config={llmConfig} 
+        onOpenConfig={() => setIsLLMConfigOpen(true)} 
+      />
+
+      {isLLMConfigOpen && (
+        <LLMConfigModal 
+          config={llmConfig} 
+          onSave={(cfg) => { setLlmConfig(cfg); setIsLLMConfigOpen(false); }} 
+          onClose={() => setIsLLMConfigOpen(false)} 
+        />
+      )}
     </div>
   );
 }
