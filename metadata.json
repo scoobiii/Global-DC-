@@ -1,0 +1,5 @@
+{
+  "name": "Global DC Sentinel: Risk & Redundancy Dashboard",
+  "description": "A high-precision SCADA-style dashboard for global data center monitoring, focusing on geopolitical risk analysis, electrical redundancy (Primary Cabin, BESS, UPS), and outage response protocols.",
+  "requestFramePermissions": []
+}
